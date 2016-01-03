@@ -6,29 +6,29 @@ Usage
 -----
 
 apache + nginx + php5
-```
+```bash
 git clone https://github.com/lagun4ik/dockerizedVestaCP.git
 ```
 
 apache + nginx + php7
-```
+```bash
 git clone --branch php7 https://github.com/lagun4ik/dockerizedVestaCP.git
 ```
 
 Create the image
 
-```
+```bash
 cd dockerizedVestaCP
 docker build -t lagun4ik/vestacp .
 ```
 
 Create the data volume
-```
+```bash
 docker volume create --name=vesta-data
 ```
 
 Running VestaCP docker image
-```
+```bash
 docker run -d \
   --restart=always \
   -p 2222:22 \
