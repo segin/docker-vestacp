@@ -1,6 +1,6 @@
 # VestaCP on Docker
 
-A dockerized version of VestaCP.
+A dockerized version of VestaCP. Without FTP server.
 
 Usage
 -----
@@ -31,6 +31,6 @@ docker run -d \
   -p 110:110 \
   -p 53:53 \
   -p 54:54 \
-  -v vesta-data:/vesta
+  -v vesta-data:/vesta \
   lagun4ik/vestacp
 ```
