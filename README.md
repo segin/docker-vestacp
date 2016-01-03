@@ -34,3 +34,7 @@ docker run -d \
   -v vesta-data:/vesta \
   lagun4ik/vestacp
 ```
+
+Authorization
+`Login: admin`
+`Password: admin`
