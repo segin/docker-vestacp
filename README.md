@@ -2,12 +2,25 @@
 
 A dockerized version of VestaCP.
 
+Usage
+-----
+
+Create the image
 ```
-docker build -t vestacp .
+git clone https://github.com/lagun4ik/dockerizedVestaCP.git
+cd dockerizedVestaCP/
+docker build -t lagun4ik/vestacp .
 ```
 
+Create the data volume
 ```
-docker run -d --restart=always \
+docker volume create --name=vesta-data
+```
+
+Running VestaCP docker image
+```
+docker run -d \
+  --restart=always \
   -p 2222:22 \
   -p 80:80 \
   -p 8083:8083 \
@@ -18,5 +31,6 @@ docker run -d --restart=always \
   -p 110:110 \
   -p 53:53 \
   -p 54:54 \
-  vestacp
+  -v vesta-data:/vesta
+  lagun4ik/vestacp
 ```
