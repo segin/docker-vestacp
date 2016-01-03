@@ -7,7 +7,7 @@ Usage
 
 Create the image
 ```
-git clone https://github.com/lagun4ik/dockerizedVestaCP.git
+git clone --branch php7 https://github.com/lagun4ik/dockerizedVestaCP.git
 cd dockerizedVestaCP/
 docker build -t lagun4ik/vestacp .
 ```
