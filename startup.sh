@@ -2,6 +2,11 @@
 
 export TERM=xterm
 
+if [ -z "`ls /vesta --hide='lost+found'`" ] 
+then
+	rsync -a /vesta-start/* /vesta
+fi
+
 #starting Vesta
 cd /etc/init.d/ && ./vesta start
 cd /etc/init.d/ && ./mysql start

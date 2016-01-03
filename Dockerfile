@@ -28,52 +28,55 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
-RUN mkdir /vesta \
-    && mv /home /vesta/home \
+RUN mkdir /vesta-start \
+    && mkdir /vesta-start/etc \
+    && mkdir /vesta-start/var \
+    && mkdir /vesta-start/local \
+    && mv /home /vesta-start/home \
     && rm -rf /home \
-    && ln -s /vesta/home /home \
-    && mv /etc/apache2 /vesta/apache2 \
+    && ln -s /vesta-start/home /home \
+    && mv /etc/apache2 /vesta-start/etc/apache2 \
     && rm -rf /etc/apache2 \
-    && ln -s /vesta/apache2 /etc/apache2 \
-    && mv /etc/php5   /vesta/php5 \
+    && ln -s /vesta/etc/apache2 /etc/apache2 \
+    && mv /etc/php5   /vesta-start/etc/php5 \
     && rm -rf /etc/php5 \
-    && ln -s /vesta/php5 /etc/php5 \
-    && mv /etc/nginx   /vesta/nginx \
+    && ln -s /vesta/etc/php5 /etc/php5 \
+    && mv /etc/nginx   /vesta-start/etc/nginx \
     && rm -rf /etc/nginx \
-    && ln -s /vesta/nginx /etc/nginx \
-    && mv /etc/bind    /vesta/bind \
+    && ln -s /vesta/etc/nginx /etc/nginx \
+    && mv /etc/bind    /vesta-start/etc/bind \
     && rm -rf /etc/bind \
-    && ln -s /vesta/bind /etc/bind \
-    && mv /etc/exim4   /vesta/exim4 \
+    && ln -s /vesta/etc/bind /etc/bind \
+    && mv /etc/exim4   /vesta-start/etc/exim4 \
     && rm -rf /etc/exim4 \
-    && ln -s /vesta/exim4 /etc/exim4 \
-    && mv /etc/dovecot /vesta/dovecot \
+    && ln -s /vesta/etc/exim4 /etc/exim4 \
+    && mv /etc/dovecot /vesta-start/etc/dovecot \
     && rm -rf /etc/dovecot \
-    && ln -s /vesta/dovecot /etc/dovecot \
-    && mv /etc/clamav  /vesta/clamav \
+    && ln -s /vesta/etc/dovecot /etc/dovecot \
+    && mv /etc/clamav  /vesta-start/etc/clamav \
     && rm -rf /etc/clamav \
-    && ln -s /vesta/clamav /etc/clamav \
-    && mv /etc/spamassassin    /vesta/spamassassin \
+    && ln -s /vesta/etc/clamav /etc/clamav \
+    && mv /etc/spamassassin    /vesta-start/etc/spamassassin \
     && rm -rf /etc/spamassassin \
-    && ln -s /vesta/spamassassin /etc/spamassassin \
-    && mv /etc/roundcube   /vesta/roundcube \
+    && ln -s /vesta/etc/spamassassin /etc/spamassassin \
+    && mv /etc/roundcube   /vesta-start/etc/roundcube \
     && rm -rf /etc/roundcube \
-    && ln -s /vesta/roundcube /etc/roundcube \
-    && mv /etc/mysql   /vesta/mysql \
+    && ln -s /vesta/etc/roundcube /etc/roundcube \
+    && mv /etc/mysql   /vesta-start/etc/mysql \
     && rm -rf /etc/mysql \
-    && ln -s /vesta/mysql /etc/mysql \
-    && mv /root    /vesta/root \
+    && ln -s /vesta/etc/mysql /etc/mysql \
+    && mv /etc/phpmyadmin  /vesta-start/etc/phpmyadmin \
+    && rm -rf /etc/phpmyadmin \
+    && ln -s /vesta/etc/phpmyadmin /etc/phpmyadmin \
+    && mv /root /vesta-start/root \
     && rm -rf /root \
     && ln -s /vesta/root /root \
-    && mv /usr/local/vesta /vesta/vesta \
+    && mv /usr/local/vesta /vesta-start/local/vesta \
     && rm -rf /usr/local/vesta \
-    && ln -s /vesta/vesta /usr/local/vesta \
-    && mv /etc/phpmyadmin  /vesta/phpmyadmin \
-    && rm -rf /etc/phpmyadmin \
-    && ln -s /vesta/phpmyadmin /etc/phpmyadmin \
-    && mv /var/log /vesta/log \
+    && ln -s /vesta/local/vesta /usr/local/vesta \
+    && mv /var/log /vesta-start/var/log \
     && rm -rf /var/log \
-    && ln -s /vesta/log /var/log
+    && ln -s /vesta/var/log /var/log
 
 VOLUME /vesta
 
