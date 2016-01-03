@@ -28,13 +28,16 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
+RUN rm -f /etc/service/sshd/down \
+    && /etc/my_init.d/00_regen_ssh_host_keys.sh
+
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
     && mkdir /vesta-start/var \
     && mkdir /vesta-start/local \
     && mv /home /vesta-start/home \
     && rm -rf /home \
-    && ln -s /vesta-start/home /home \
+    && ln -s /vesta/home /home \
     && mv /etc/apache2 /vesta-start/etc/apache2 \
     && rm -rf /etc/apache2 \
     && ln -s /vesta/etc/apache2 /etc/apache2 \

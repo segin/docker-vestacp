@@ -5,10 +5,20 @@ A dockerized version of VestaCP. Without FTP server.
 Usage
 -----
 
-Create the image
+apache + nginx + php5
 ```
 git clone https://github.com/lagun4ik/dockerizedVestaCP.git
-cd dockerizedVestaCP/
+```
+
+apache + nginx + php7
+```
+git clone --branch php7 https://github.com/lagun4ik/dockerizedVestaCP.git
+```
+
+Create the image
+
+```
+cd dockerizedVestaCP
 docker build -t lagun4ik/vestacp .
 ```
 
@@ -36,5 +46,15 @@ docker run -d \
 ```
 
 Authorization
+---
+
 `Login: admin`
 `Password: admin`
+
+
+SSH and FTP
+---
+
+Use SFTP instead of FTP.
+
+SSH and SFTP are available on the `2222` port
