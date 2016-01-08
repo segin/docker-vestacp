@@ -1,4 +1,4 @@
-FROM babim/ubuntubase
+FROM babim/ubuntubaseinit
 
 RUN apt-get update \
  && apt-get -y upgrade \
