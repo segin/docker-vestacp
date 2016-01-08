@@ -76,6 +76,14 @@ RUN mkdir /vesta-start \
     && rm -rf /var/log \
     && ln -s /vesta/var/log /var/log
 
+RUN apt-get clean && \
+    apt-get autoclean && \
+    apt-get autoremove -y && \
+    rm -rf /build && \
+    rm -rf /tmp/* /var/tmp/* && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
+    
 VOLUME /vesta
 
 RUN mkdir -p /etc/my_init.d
