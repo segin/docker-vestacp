@@ -94,6 +94,4 @@ RUN mkdir -p /etc/my_init.d
 ADD startup.sh /etc/my_init.d/startup.sh
 RUN chmod +x /etc/my_init.d/startup.sh
 
-CMD ["/etc/my_init.d/startup.sh"]
-
 EXPOSE 80 8083 3306 443 25 993 110 53 54
