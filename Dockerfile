@@ -1,4 +1,4 @@
-FROM babim/ubuntubase:ssh
+FROM babim/ubuntubaseinit:ssh
 
 RUN apt-get update \
  && apt-get -y upgrade \
