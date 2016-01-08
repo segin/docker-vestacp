@@ -35,9 +35,6 @@ RUN apt-get -y purge php5 \
     && rm -rf /etc/apache2/mods-enabled/php5.conf \
     && rm -rf /etc/apache2/mods-enabled/php5.load
 
-RUN rm -f /etc/service/sshd/down \
-    && /etc/my_init.d/00_regen_ssh_host_keys.sh
-
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
     && mkdir /vesta-start/var \
