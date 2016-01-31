@@ -29,6 +29,7 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
 RUN apt-get -y purge php5 \
     && apt-get -y install python-software-properties language-pack-en-base \
     && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php-7.0 -y \
+    && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/apache2 -y \
     && apt-get update \
     && apt-get install -y php7.0 \
     && apt-get install -y \
