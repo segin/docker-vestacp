@@ -76,6 +76,13 @@ RUN mkdir /vesta-start \
     && rm -rf /var/log \
     && ln -s /vesta/var/log /var/log
 
+RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php5/apache2/php.ini && \
+    sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /etc/php5/cli/php.ini && \
+    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /etc/php5/cli/php.ini && \
+    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /etc/php5/apache2/php.ini && \
+    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /etc/php5/apache2/php.ini && \
+    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /etc/php5/cli/php.ini
+    
 RUN apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove -y && \
