@@ -81,7 +81,11 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc
     sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/cli/php.ini && \
     sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/apache2/php.ini && \
-    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/cli/php.ini
+    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/cli/php.ini && \
+    sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php5/fpm/php.ini && \
+    sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php5/fpm/php.ini && \
+    sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php5/cli/php.ini && \
+    sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php5/cli/php.ini
     
 RUN apt-get clean && \
     apt-get autoclean && \
