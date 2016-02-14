@@ -89,19 +89,6 @@ RUN mkdir /vesta-start \
     && rm -rf /var/log \
     && ln -s /vesta/var/log /var/log
 
-RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php/7.0/cli/php.ini && \
-    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/cli/php.ini && \
-    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php/7.0/cli/php.ini && \
-    sed -i "s/post_max_size = 8M/post_max_size = 520M/" /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -i "s/post_max_size = 8M/post_max_size = 520M/" /vesta-start/etc/php/7.0/cli/php.ini && \
-    sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini && \
-    sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini
-
 RUN dpkg-reconfigure locales && \
     locale-gen en_US.UTF-8 && \
 	   update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
