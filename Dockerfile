@@ -2,6 +2,14 @@ FROM phusion/baseimage
 
 MAINTAINER ducanh.babim@yahoo.com
 
+RUN rm -f /etc/motd && \
+    echo "---" > /etc/motd && \
+    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "---" >> /etc/motd && \
+    echo "Babim Container Framework \l" > /etc/issue && \
+    echo "Babim Container Framework" > /etc/issue.net && \
+    touch "/(C) Babim"
+    
 RUN apt-get update \
  && apt-get -y upgrade \
  && apt-get -y install git unzip nano
@@ -91,6 +99,10 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc
     sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini && \
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini
     
+RUN dpkg-reconfigure locales && \
+    locale-gen en_US.UTF-8 && \
+	   update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+	
 RUN apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove -y && \
@@ -106,3 +118,5 @@ ADD startup.sh /etc/my_init.d/startup.sh
 RUN chmod +x /etc/my_init.d/startup.sh
 
 EXPOSE 22 80 8083 3306 443 25 993 110 53 54
+ENV LC_ALL en_US.UTF-8
+ENV TZ Asia/Ho_Chi_Minh
