@@ -1,3 +1,5 @@
+Thanks lagun4ik
+
 # VestaCP on Docker
 
 A dockerized version of VestaCP. Without FTP server.
@@ -7,19 +9,19 @@ Usage
 
 apache + nginx + php5
 ```bash
-git clone https://github.com/lagun4ik/dockerizedVestaCP.git
+git clone https://github.com/babim/docker-vestacp.git
 ```
 
 apache + nginx + php7
 ```bash
-git clone --branch php7 https://github.com/lagun4ik/dockerizedVestaCP.git
+git clone --branch php7 https://github.com/babim/docker-vestacp.git
 ```
 
 Create the image
 
 ```bash
-cd dockerizedVestaCP
-docker build -t lagun4ik/vestacp .
+cd docker-vestacp
+docker build -t babim/vestacp .
 ```
 
 Create the data volume
