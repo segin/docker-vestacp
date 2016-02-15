@@ -8,6 +8,7 @@ then
 fi
 
 #starting Vesta
+chown root:root /var/run/sshd
 cd /etc/init.d/ && ./vesta start
 cd /etc/init.d/ && ./mysql start
 cd /etc/init.d/ && ./nginx start
