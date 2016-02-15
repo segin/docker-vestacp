@@ -1,3 +1,5 @@
+Thanks lagun4ik
+
 # VestaCP on Docker
 
 A dockerized version of VestaCP. Without FTP server.
@@ -5,20 +7,30 @@ A dockerized version of VestaCP. Without FTP server.
 Usage
 -----
 
-Create the image
+apache + nginx + php5
+```bash
+git clone https://github.com/babim/docker-vestacp.git
 ```
-git clone --branch php7 https://github.com/lagun4ik/dockerizedVestaCP.git
-cd dockerizedVestaCP/
-docker build -t lagun4ik/vestacp .
+
+apache + nginx + php7
+```bash
+git clone --branch php7 https://github.com/babim/docker-vestacp.git
+```
+
+Create the image
+
+```bash
+cd docker-vestacp
+docker build -t babim/vestacp .
 ```
 
 Create the data volume
-```
+```bash
 docker volume create --name=vesta-data
 ```
 
 Running VestaCP docker image
-```
+```bash
 docker run -d \
   --restart=always \
   -p 2222:22 \
@@ -36,5 +48,15 @@ docker run -d \
 ```
 
 Authorization
+---
+
 `Login: admin`
 `Password: admin`
+
+
+SSH and FTP
+---
+
+Use SFTP instead of FTP.
+
+SSH and SFTP are available on the `2222` port
