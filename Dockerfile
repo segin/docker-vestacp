@@ -1,12 +1,12 @@
 FROM babim/ubuntubase
 
 RUN apt-get update \
- && apt-get -y install git unzip nano && rm -f /etc/issue
+ && apt-get -y install git unzip nano
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
-RUN bash /install-ubuntu.sh \
+RUN echo Y | bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
  --exim yes --dovecot yes --spamassassin yes --clamav yes \
