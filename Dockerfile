@@ -1,7 +1,14 @@
-FROM babim/ubuntubase
+FROM ubuntu:trusty
+MAINTAINER "Duc Anh Babim" <ducanh.babim@yahoo.com>
 
+RUN rm -f /etc/motd && \
+    echo "---" > /etc/motd && \
+    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "---" >> /etc/motd && \
+    touch "/(C) Babim"
+    
 RUN apt-get update \
- && apt-get -y install git unzip nano
+ && apt-get -y install git unzip nano locales
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
