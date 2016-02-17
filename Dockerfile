@@ -1,7 +1,6 @@
 FROM babim/ubuntubase
 
 RUN apt-get update \
- && apt-get -y upgrade \
  && apt-get -y install git unzip nano
 
 ADD install-ubuntu.sh /install-ubuntu.sh
