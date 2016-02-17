@@ -1,7 +1,7 @@
 (Thanks lagun4ik)
 
-Failed when autobuild on hub.docker.com
-please download and build on your computer/server
+Failed when autobuild on hub.docker.com (docker 1.6)
+please download and build on your computer/server with lastest docker
 
 run great without FTP.
 
