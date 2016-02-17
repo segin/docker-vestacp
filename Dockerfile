@@ -1,7 +1,7 @@
 FROM babim/ubuntubase
 
 RUN apt-get update \
- && apt-get -y install git unzip nano
+ && apt-get -y install git unzip nano && rm -f /etc/issue
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
