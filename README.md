@@ -1,13 +1,6 @@
 (Thanks lagun4ik)
 
-Failed when autobuild on hub.docker.com (docker 1.6)
-please download and build on your computer/server with lastest docker
-
 run great without FTP.
-
-# VestaCP on Docker
-
-A dockerized version of VestaCP. Without FTP server.
 
 Usage
 -----
