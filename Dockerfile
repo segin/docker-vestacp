@@ -26,7 +26,7 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
 RUN apt-get -y purge php5 \
-    && apt-get -y install python-software-properties language-pack-en-base \
+    && apt-get -y install software-properties-common language-pack-en-base \
     && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php-7.0 -y \
     && apt-get update \
     && apt-get install -y php7.0 \
