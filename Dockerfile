@@ -25,8 +25,14 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
-RUN rm -f /etc/service/sshd/down \
-    && /etc/my_init.d/00_regen_ssh_host_keys.sh
+RUN apt-get -y purge php5 \
+    && apt-get -y install python-software-properties language-pack-en-base \
+    && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php-7.0 -y \
+    && apt-get update \
+    && apt-get install -y php7.0 \
+    && apt-get install -y php7.0-common libapache2-mod-php7.0 php7.0-cgi php7.0-cli php7.0-phpdbg libphp7.0-embed php7.0-dev php7.0-dbg php7.0-curl php7.0-gd php7.0-imap php7.0-interbase php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-readline php7.0-odbc php7.0-pgsql php7.0-pspell php7.0-recode php7.0-tidy php7.0-xmlrpc php7.0 php7.0-json php-all-dev php7.0-sybase php7.0-modules-source php7.0-sqlite3 php7.0-mysql php7.0-opcache php7.0-bz2 \
+    && rm -rf /etc/apache2/mods-enabled/php5.conf \
+    && rm -rf /etc/apache2/mods-enabled/php5.load
 
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
@@ -81,7 +87,20 @@ RUN mkdir /vesta-start \
 RUN dpkg-reconfigure locales && \
     locale-gen en_US.UTF-8 && \
 	   update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
-	
+
+RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php/7.0/apache2/php.ini && \
+    sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php/7.0/cli/php.ini && \
+    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/cli/php.ini && \
+    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/apache2/php.ini && \
+    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php/7.0/apache2/php.ini && \
+    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php/7.0/cli/php.ini && \
+    sed -i "s/post_max_size = 8M/post_max_size = 520M/" /vesta-start/etc/php/7.0/apache2/php.ini && \
+    sed -i "s/post_max_size = 8M/post_max_size = 520M/" /vesta-start/etc/php/7.0/cli/php.ini && \
+    sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/apache2/php.ini && \
+    sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/apache2/php.ini && \
+    sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini && \
+    sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini
+    
 RUN apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove -y && \
