@@ -10,7 +10,7 @@ RUN rm -f /etc/motd && \
 RUN apt-get update \
  && apt-get -y install git unzip nano locales openssh-server
  
- RUN mkdir /var/run/sshd
+RUN mkdir /var/run/sshd
 # set password root is root
 RUN echo 'root:root' | chpasswd
 # allow root ssh
