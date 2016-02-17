@@ -1,23 +1,12 @@
 FROM babim/ubuntubase
 
-MAINTAINER ducanh.babim@yahoo.com
-
-RUN rm -f /etc/motd && \
-    echo "---" > /etc/motd && \
-    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
-    echo "---" >> /etc/motd && \
-    echo "Babim Container Framework \l" > /etc/issue && \
-    echo "Babim Container Framework" > /etc/issue.net && \
-    touch "/(C) Babim"
-    
 RUN apt-get update \
- && apt-get -y upgrade \
  && apt-get -y install git unzip nano
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
-RUN bash /install-ubuntu.sh \
+RUN echo Y | bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
  --exim yes --dovecot yes --spamassassin yes --clamav yes \
