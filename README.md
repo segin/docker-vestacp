@@ -1,4 +1,8 @@
-Thanks lagun4ik
+(Thanks lagun4ik)
+
+Failed when autobuild on hub.docker.com please download and build on your computer/server
+
+run great without FTP.
 
 # VestaCP on Docker
 
