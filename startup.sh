@@ -9,6 +9,7 @@ fi
 
 #starting Vesta
 chown root:root /var/run/sshd
+service ssh start
 cd /etc/init.d/ && ./vesta start
 cd /etc/init.d/ && ./mysql start
 cd /etc/init.d/ && ./nginx start
