@@ -27,7 +27,7 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
 
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
-    && mkdir /vesta-start/var \
+    && mkdir /vesta-start/var/lib \
     && mkdir /vesta-start/local \
     && mv /home /vesta-start/home \
     && rm -rf /home \
@@ -73,7 +73,10 @@ RUN mkdir /vesta-start \
     && ln -s /vesta/local/vesta /usr/local/vesta \
     && mv /var/log /vesta-start/var/log \
     && rm -rf /var/log \
-    && ln -s /vesta/var/log /var/log
+    && ln -s /vesta/var/log /var/log \
+    && mv /var/lib/mysql /vesta-start/var/lib/mysql \
+    && rm -rf /var/lib/mysql \
+    && ln -s /vesta/var/lib/mysql /var/lib/mysql
 
 RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php5/apache2/php.ini && \
     sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php5/cli/php.ini && \
