@@ -45,7 +45,7 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
-RUN apt-get -y purge php5 \
+RUN apt-get -y purge php5 && apt-get --purge autoremove \
     && apt-get -y install software-properties-common language-pack-en-base \
     && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php -y \
     && apt-get update \
