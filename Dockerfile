@@ -1,11 +1,35 @@
-FROM babim/ubuntubase:ssh
+FROM phusion/baseimage
+MAINTAINER "Duc Anh Babim" <ducanh.babim@yahoo.com>
+
+ENV VESTA /usr/local/vesta
+
+RUN rm -f /etc/motd && \
+    echo "---" > /etc/motd && \
+    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "---" >> /etc/motd && \
+    touch "/(C) Babim"
 
 RUN apt-get update \
- && apt-get -y install git unzip nano locales openssh-server
- 
+ && apt-get -y install git unzip nano locales
+
+RUN dpkg-reconfigure locales && \
+    locale-gen en_US.UTF-8 && \
+   	update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+
+# enable ssh
+RUN rm -f /etc/service/sshd/down \
+    && /etc/my_init.d/00_regen_ssh_host_keys.sh
+    
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
+# fix sudo
+RUN chown root:root /usr/lib/sudo/sudoers.so \
+    && chmod 644 /usr/lib/sudo/sudoers.so \
+    && chown -R root:root /etc/sudo* \
+    && chown root:root /usr/bin/sudo
+
+# install vestacp with admin:admin
 RUN echo Y | bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
@@ -33,7 +57,7 @@ RUN apt-get -y purge php5 \
     && apt-get install -y php7.0-common libapache2-mod-php7.0 php7.0-cgi php7.0-cli php7.0-phpdbg libphp7.0-embed php7.0-dev php7.0-dbg php7.0-curl php7.0-gd php7.0-imap php7.0-interbase php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-readline php7.0-odbc php7.0-pgsql php7.0-pspell php7.0-recode php7.0-tidy php7.0-xmlrpc php7.0 php7.0-json php-all-dev php7.0-sybase php7.0-modules-source php7.0-sqlite3 php7.0-mysql php7.0-opcache php7.0-bz2 \
     && rm -rf /etc/apache2/mods-enabled/php5.conf \
     && rm -rf /etc/apache2/mods-enabled/php5.load
-
+    
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
     && mkdir /vesta-start/var/lib \
@@ -99,7 +123,7 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/apache2/php.ini && \
     sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini && \
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini
-    
+
 RUN apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove -y && \
@@ -111,9 +135,9 @@ RUN apt-get clean && \
 ENV VESTA /usr/local/vesta
 VOLUME /vesta
 
-ADD startup.sh /startup.sh
-RUN chmod +x /startup.sh
-CMD /startup.sh
+RUN mkdir -p /etc/my_init.d
+ADD startup.sh /etc/my_init.d/startup.sh
+RUN chmod +x /etc/my_init.d/startup.sh
 
 EXPOSE 22 80 8083 3306 443 25 993 110 53 54
 ENV LC_ALL en_US.UTF-8
