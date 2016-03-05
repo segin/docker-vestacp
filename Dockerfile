@@ -131,9 +131,9 @@ RUN apt-get clean && \
 ENV VESTA /usr/local/vesta
 VOLUME /vesta
 
-ADD startup.sh /startup.sh
-RUN chmod +x /startup.sh
-CMD /startup.sh
+RUN mkdir -p /etc/my_init.d
+ADD startup.sh /etc/my_init.d/startup.sh
+RUN chmod +x /etc/my_init.d/startup.sh
 
 EXPOSE 22 80 8083 3306 443 25 993 110 53 54
 ENV LC_ALL en_US.UTF-8
