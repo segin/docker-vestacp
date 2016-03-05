@@ -1,11 +1,20 @@
 FROM babim/ubuntubase
 
+ENV VESTA /usr/local/vesta
+
 RUN apt-get update \
- && apt-get -y install git unzip nano
+ && apt-get -y install git unzip nano sudo
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
+# fix sudo
+RUN chown root:root /usr/lib/sudo/sudoers.so \
+    && chmod 644 /usr/lib/sudo/sudoers.so \
+    && chown -R root:root /etc/sudo* \
+    && chown root:root /usr/bin/sudo
+
+# install vestacp with admin:admin
 RUN echo Y | bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
@@ -78,6 +87,7 @@ RUN mkdir /vesta-start \
     && rm -rf /var/lib/mysql \
     && ln -s /vesta/var/lib/mysql /var/lib/mysql
 
+# tweak php
 RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php5/apache2/php.ini && \
     sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php5/cli/php.ini && \
     sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/cli/php.ini && \
@@ -91,6 +101,7 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc
     sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php5/cli/php.ini && \
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php5/cli/php.ini
     
+# clean
 RUN apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove -y && \
@@ -99,7 +110,6 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
 
-ENV VESTA /usr/local/vesta
 VOLUME /vesta
 
 ADD startup.sh /startup.sh
