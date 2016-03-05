@@ -1,11 +1,31 @@
-FROM babim/ubuntubase
+FROM phusion/baseimage
+MAINTAINER "Duc Anh Babim" <ducanh.babim@yahoo.com>
+
+ENV VESTA /usr/local/vesta
+
+RUN rm -f /etc/motd && \
+    echo "---" > /etc/motd && \
+    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "---" >> /etc/motd && \
+    touch "/(C) Babim"
 
 RUN apt-get update \
  && apt-get -y install git unzip nano locales
 
+RUN dpkg-reconfigure locales && \
+    locale-gen en_US.UTF-8 && \
+   	update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
+# fix sudo
+RUN chown root:root /usr/lib/sudo/sudoers.so \
+    && chmod 644 /usr/lib/sudo/sudoers.so \
+    && chown -R root:root /etc/sudo* \
+    && chown root:root /usr/bin/sudo
+
+# install vestacp with admin:admin
 RUN echo Y | bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
