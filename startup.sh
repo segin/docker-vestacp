@@ -18,4 +18,3 @@ cd /etc/init.d/ && ./bind9 start
 cd /etc/init.d/ && ./dovecot start
 cd /etc/init.d/ && ./ssh start
 
-bash
