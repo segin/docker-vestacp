@@ -1,32 +1,14 @@
 FROM phusion/baseimage
 MAINTAINER "Duc Anh Babim" <ducanh.babim@yahoo.com>
 
-ENV VESTA /usr/local/vesta
-
-RUN rm -f /etc/motd && \
-    echo "---" > /etc/motd && \
-    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
-    echo "---" >> /etc/motd && \
-    touch "/(C) Babim"
-
 RUN apt-get update \
+ && apt-get -y upgrade \
  && apt-get -y install git unzip nano locales
-
-RUN dpkg-reconfigure locales && \
-    locale-gen en_US.UTF-8 && \
-   	update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
-# fix sudo
-RUN chown root:root /usr/lib/sudo/sudoers.so \
-    && chmod 644 /usr/lib/sudo/sudoers.so \
-    && chown -R root:root /etc/sudo* \
-    && chown root:root /usr/bin/sudo
-
-# install vestacp with admin:admin
-RUN echo Y | bash /install-ubuntu.sh \
+RUN bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
  --exim yes --dovecot yes --spamassassin yes --clamav yes \
@@ -45,18 +27,18 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
-RUN apt-get -y purge php5 && apt-get --purge autoremove -y \
-    && apt-get -y install software-properties-common language-pack-en-base \
+RUN apt-get -y purge php5* && apt-get -y --purge autoremove \
+    && apt-get -y install python-software-properties language-pack-en-base \
     && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php -y \
     && apt-get update \
     && apt-get install -y php7.0 \
-    && apt-get install -y php7.0-common libapache2-mod-php7.0 php7.0-cgi php7.0-cli php7.0-phpdbg libphp7.0-embed php7.0-dev php7.0-dbg php7.0-curl php7.0-gd php7.0-imap php7.0-interbase php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-readline php7.0-odbc php7.0-pgsql php7.0-pspell php7.0-recode php7.0-tidy php7.0-xmlrpc php7.0 php7.0-json php-all-dev php7.0-sybase php7.0-modules-source php7.0-sqlite3 php7.0-mysql php7.0-opcache php7.0-bz2 \
+    && apt-get install -y php7.0-common libapache2-mod-php7.0 php7.0-cgi php7.0-cli php7.0-phpdbg libphp7.0-embed php7.0-dev php7.0-dbg php7.0-curl php7.0-gd php7.0-imap php7.0-interbase php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-readline php7.0-odbc php7.0-pgsql php7.0-pspell php7.0-recode php7.0-tidy php7.0-xmlrpc php7.0 php7.0-json php-all-dev php7.0-sybase php7.0-sqlite3 php7.0-mysql php7.0-opcache php7.0-bz2 \
     && rm -rf /etc/apache2/mods-enabled/php5.conf \
     && rm -rf /etc/apache2/mods-enabled/php5.load
-    
+
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
-    && mkdir /vesta-start/var/lib \
+    && mkdir -p /vesta-start/var/lib \
     && mkdir /vesta-start/local \
     && mv /home /vesta-start/home \
     && rm -rf /home \
@@ -64,9 +46,9 @@ RUN mkdir /vesta-start \
     && mv /etc/apache2 /vesta-start/etc/apache2 \
     && rm -rf /etc/apache2 \
     && ln -s /vesta/etc/apache2 /etc/apache2 \
-    && mv /etc/php5   /vesta-start/etc/php5 \
-    && rm -rf /etc/php5 \
-    && ln -s /vesta/etc/php5 /etc/php5 \
+    && mv /etc/php   /vesta-start/etc/php \
+    && rm -rf /etc/php /etc/php5 \
+    && ln -s /vesta/etc/php /etc/php \
     && mv /etc/nginx   /vesta-start/etc/nginx \
     && rm -rf /etc/nginx \
     && ln -s /vesta/etc/nginx /etc/nginx \
@@ -85,9 +67,9 @@ RUN mkdir /vesta-start \
     && mv /etc/spamassassin    /vesta-start/etc/spamassassin \
     && rm -rf /etc/spamassassin \
     && ln -s /vesta/etc/spamassassin /etc/spamassassin \
-    && mv /etc/roundcube   /vesta-start/etc/roundcube \
-    && rm -rf /etc/roundcube \
-    && ln -s /vesta/etc/roundcube /etc/roundcube \
+#    && mv /etc/roundcube   /vesta-start/etc/roundcube \
+#    && rm -rf /etc/roundcube \
+#    && ln -s /vesta/etc/roundcube /etc/roundcube \
     && mv /etc/mysql   /vesta-start/etc/mysql \
     && rm -rf /etc/mysql \
     && ln -s /vesta/etc/mysql /etc/mysql \
@@ -107,9 +89,7 @@ RUN mkdir /vesta-start \
     && rm -rf /var/lib/mysql \
     && ln -s /vesta/var/lib/mysql /var/lib/mysql
 
-RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php/7.0/apache2/php.ini && \
-    sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php/7.0/cli/php.ini && \
-    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/cli/php.ini && \
+RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/cli/php.ini && \
     sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php/7.0/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php/7.0/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php/7.0/cli/php.ini && \
@@ -120,6 +100,17 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc
     sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini && \
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php/7.0/cli/php.ini
 
+RUN rm -f /etc/motd && \
+    echo "---" > /etc/motd && \
+    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "---" >> /etc/motd && \
+    touch "/(C) Babim"
+
+RUN dpkg-reconfigure locales && \
+    locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+
+# clean
 RUN apt-get clean && \
     apt-get autoclean && \
     apt-get autoremove -y && \
@@ -128,6 +119,9 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
 
+ENV LC_ALL en_US.UTF-8
+ENV TZ Asia/Ho_Chi_Minh
+
 ENV VESTA /usr/local/vesta
 VOLUME /vesta
 
@@ -135,6 +129,4 @@ RUN mkdir -p /etc/my_init.d
 ADD startup.sh /etc/my_init.d/startup.sh
 RUN chmod +x /etc/my_init.d/startup.sh
 
-EXPOSE 22 80 8083 3306 443 25 993 110 53 54
-ENV LC_ALL en_US.UTF-8
-ENV TZ Asia/Ho_Chi_Minh
+EXPOSE 80 8083 3306 443 25 993 110 53 54
