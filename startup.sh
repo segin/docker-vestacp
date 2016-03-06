@@ -16,4 +16,3 @@ cd /etc/init.d/ && ./apache2 start
 cd /etc/init.d/ && ./bind9 start
 cd /etc/init.d/ && ./dovecot start
 
-bash
