@@ -1,21 +1,14 @@
-FROM babim/ubuntubaseinit:ssh
-
-ENV VESTA /usr/local/vesta
+FROM phusion/baseimage
+MAINTAINER "Duc Anh Babim" <ducanh.babim@yahoo.com>
 
 RUN apt-get update \
- && apt-get -y install git unzip nano sudo
+ && apt-get -y upgrade \
+ && apt-get -y install git unzip nano locales
 
 ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
-# fix sudo
-RUN chown root:root /usr/lib/sudo/sudoers.so \
-    && chmod 644 /usr/lib/sudo/sudoers.so \
-    && chown -R root:root /etc/sudo* \
-    && chown root:root /usr/bin/sudo
-
-# install vestacp with admin:admin
-RUN echo Y | bash /install-ubuntu.sh \
+RUN bash /install-ubuntu.sh \
  --nginx yes --apache yes --phpfpm no \
  --vsftpd no --proftpd no \
  --exim yes --dovecot yes --spamassassin yes --clamav yes \
@@ -33,6 +26,9 @@ RUN chmod +x /etc/init.d/dovecot
 RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
+
+RUN rm -f /etc/service/sshd/down \
+    && /etc/my_init.d/00_regen_ssh_host_keys.sh
 
 RUN mkdir /vesta-start \
     && mkdir /vesta-start/etc \
@@ -88,9 +84,7 @@ RUN mkdir /vesta-start \
     && ln -s /vesta/var/lib/mysql /var/lib/mysql
 
 # tweak php
-RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php5/apache2/php.ini && \
-    sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc/php5/cli/php.ini && \
-    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/cli/php.ini && \
+RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/cli/php.ini && \
     sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/cli/php.ini && \
@@ -100,7 +94,17 @@ RUN sed -ri 's/^display_errors\s*=\s*Off/display_errors = On/g' /vesta-start/etc
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php5/apache2/php.ini && \
     sed -i "s/max_input_time = 60/max_input_time = 3600/" /vesta-start/etc/php5/cli/php.ini && \
     sed -i "s/max_execution_time = 30/max_execution_time = 3600/" /vesta-start/etc/php5/cli/php.ini
-    
+
+RUN rm -f /etc/motd && \
+    echo "---" > /etc/motd && \
+    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "---" >> /etc/motd && \
+    touch "/(C) Babim"
+
+RUN dpkg-reconfigure locales && \
+    locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+
 # clean
 RUN apt-get clean && \
     apt-get autoclean && \
@@ -110,10 +114,14 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
 
+ENV LC_ALL en_US.UTF-8
+ENV TZ Asia/Ho_Chi_Minh
+
+ENV VESTA /usr/local/vesta
 VOLUME /vesta
 
 RUN mkdir -p /etc/my_init.d
 ADD startup.sh /etc/my_init.d/startup.sh
 RUN chmod +x /etc/my_init.d/startup.sh
 
-EXPOSE 80 8083 3306 443 25 993 110 53 54 22
+EXPOSE 22 80 8083 3306 443 25 993 110 53 54
