@@ -9,14 +9,6 @@ ADD install-ubuntu.sh /install-ubuntu.sh
 RUN chmod +x /install-ubuntu.sh
 
 RUN bash /install-ubuntu.sh \
- --nginx yes --apache yes --phpfpm no \
- --vsftpd no --proftpd no \
- --exim yes --dovecot yes --spamassassin yes --clamav yes \
- --named yes \
- --iptables no --fail2ban no \
- --mysql yes --postgresql no \
- --remi yes \
- --quota no \
  --password admin \
  -y no -f
 
@@ -27,16 +19,6 @@ RUN cd /usr/local/vesta/data/ips && mv * 127.0.0.1 \
     && cd /etc/apache2/conf.d && sed -i -- 's/172.*.*.*:80/127.0.0.1:80/g' * && sed -i -- 's/172.*.*.*:8443/127.0.0.1:8443/g' * \
     && cd /etc/nginx/conf.d && sed -i -- 's/172.*.*.*:80 default;/80 default;/g' * && sed -i -- 's/172.*.*.*:8080/127.0.0.1:8080/g' *
 
-RUN apt-get -y purge php5* && apt-get -y --purge autoremove \
-    && apt-get -y install python-software-properties language-pack-en-base \
-    && LC_ALL=en_US.UTF-8 add-apt-repository ppa:ondrej/php -y \
-    && apt-get update \
-    && apt-get install -y php7.0 \
-    && apt-get install -y php7.0-common libapache2-mod-php7.0 php7.0-cgi php7.0-cli php7.0-phpdbg libphp7.0-embed php7.0-dev php7.0-curl php7.0-gd php7.0-imap php7.0-interbase php7.0-intl php7.0-ldap php7.0-mcrypt php7.0-readline php7.0-odbc php7.0-pgsql php7.0-pspell php7.0-recode php7.0-tidy php7.0-xmlrpc php7.0 php7.0-json php-all-dev php7.0-sybase php7.0-sqlite3 php7.0-mysql php7.0-opcache php7.0-bz2 \
-    && rm -rf /etc/apache2/mods-enabled/php5.conf \
-    && rm -rf /etc/apache2/mods-enabled/php5.load
-#disable because error: php7.0-dbg php7.0-modules-source
-    
 RUN rm -f /etc/service/sshd/down \
     && /etc/my_init.d/00_regen_ssh_host_keys.sh
     
@@ -47,9 +29,9 @@ RUN mkdir /vesta-start \
     && mv /home /vesta-start/home \
     && rm -rf /home \
     && ln -s /vesta/home /home \
-    && mv /etc/apache2 /vesta-start/etc/apache2 \
-    && rm -rf /etc/apache2 \
-    && ln -s /vesta/etc/apache2 /etc/apache2 \
+#    && mv /etc/apache2 /vesta-start/etc/apache2 \
+#    && rm -rf /etc/apache2 \
+#    && ln -s /vesta/etc/apache2 /etc/apache2 \
     && mv /etc/php   /vesta-start/etc/php \
     && rm -rf /etc/php /etc/php5 \
     && ln -s /vesta/etc/php /etc/php \
