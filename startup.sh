@@ -14,4 +14,5 @@ cd /etc/init.d/ \
 && ./nginx start \
 && ./exim4 start \
 && ./php7.0-fpm start \
-&& ./dovecot start
+&& ./dovecot start \
+&& ./ssh start
