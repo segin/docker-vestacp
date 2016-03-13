@@ -33,7 +33,7 @@ RUN mkdir /vesta-start \
 #    && rm -rf /etc/apache2 \
 #    && ln -s /vesta/etc/apache2 /etc/apache2 \
     && mv /etc/php   /vesta-start/etc/php \
-    && rm -rf /etc/php /etc/php5 \
+    && rm -rf /etc/php \
     && ln -s /vesta/etc/php /etc/php \
     && mv /etc/nginx   /vesta-start/etc/nginx \
     && rm -rf /etc/nginx \
