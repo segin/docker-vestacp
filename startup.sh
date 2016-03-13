@@ -8,11 +8,10 @@ then
 fi
 
 #starting Vesta
-cd /etc/init.d/ && ./vesta start
-cd /etc/init.d/ && ./mysql start
-cd /etc/init.d/ && ./nginx start
-cd /etc/init.d/ && ./exim4 start
-cd /etc/init.d/ && ./apache2 start
-cd /etc/init.d/ && ./bind9 start
-cd /etc/init.d/ && ./dovecot start
-
+cd /etc/init.d/ \
+&& ./vesta start \
+&& ./mysql start \
+&& ./nginx start \
+&& ./exim4 start \
+&& ./php7.0-fpm start \
+&& ./dovecot start
