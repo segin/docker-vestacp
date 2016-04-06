@@ -1,5 +1,5 @@
 FROM phusion/baseimage
-MAINTAINER "Duc Anh Babim" <ducanh.babim@yahoo.com>
+MAINTAINER "Kirn Gill II" <segin2005@gmail.com>
 
 RUN apt-get update \
  && apt-get -y upgrade \
@@ -81,8 +81,8 @@ RUN mkdir /vesta-start \
     && ln -s /vesta/var/lib/mysql /var/lib/mysql
 
 # tweak php
-RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/cli/php.ini && \
-    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /vesta-start/etc/php5/apache2/php.ini && \
+RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\	America\/Los_Angeles/g' /vesta-start/etc/php5/cli/php.ini && \
+    sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\	America\/Los_Angeles/g' /vesta-start/etc/php5/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/apache2/php.ini && \
     sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 520M/" /vesta-start/etc/php5/cli/php.ini && \
     sed -i "s/post_max_size = 8M/post_max_size = 520M/" /vesta-start/etc/php5/apache2/php.ini && \
@@ -94,7 +94,7 @@ RUN sed -i 's/\;date\.timezone\ \=/date\.timezone\ \=\ Asia\/Ho_Chi_Minh/g' /ves
 
 RUN rm -f /etc/motd && \
     echo "---" > /etc/motd && \
-    echo "Support by Duc Anh Babim. Contact: ducanh.babim@yahoo.com" >> /etc/motd && \
+    echo "Support by Kirn Gill II. Contact: segin2005@gmail.com" >> /etc/motd && \
     echo "---" >> /etc/motd && \
     touch "/(C) Babim"
 
@@ -112,7 +112,7 @@ RUN apt-get clean && \
     rm -f /etc/dpkg/dpkg.cfg.d/02apt-speedup
 
 ENV LC_ALL en_US.UTF-8
-ENV TZ Asia/Ho_Chi_Minh
+ENV TZ	America/Los_Angeles
 
 ENV VESTA /usr/local/vesta
 VOLUME /vesta
